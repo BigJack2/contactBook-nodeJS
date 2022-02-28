@@ -1,6 +1,7 @@
 import contact from "../models/contact.js";
 import Contact from "../models/contact.js";
 
+
 const registerContact = async (req, res) => {
   if (!req.body.name || !req.body.landline || !req.body.cellPhone)
     return res.status(400).send({ message: "Incomplete data" });
@@ -31,12 +32,13 @@ const listContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
 
-  const contacts = await contact.findOneAndDelete(req.params["name"]);
+  const contacts = await contact.findOneAndDelete({ name: req.params["name"] })
 
   return !contacts
     ? res.status(400).send({ message: "Contact no found" })
     : res.status(200).send({ message: "Contact deleted" });
 };
+
 
 //Buscar contacto existente por nombre en el body
 const existingContact = async (req, res) => {
@@ -51,4 +53,39 @@ const existingContact = async (req, res) => {
 };
 
 
-export default { registerContact, listContact, deleteContact, existingContact };
+const directoryFull = async (req, res) => {
+
+  const contacts = await Contact.count();
+
+  if (contacts >= 10) {
+    res.status(400).send({ message: "Contact book full" })
+  } else {
+    let counter = 10 - contacts;
+    res.status(400).send({ message: "Can still register " + counter + " new contacts." })
+  }
+
+};
+
+
+
+const updateContact = async (req, res) => {
+
+  //Si no hay problema pasamos a realizar la actualizacion
+  const existContact = await Contact.findOne({ name: req.body.name });
+
+  if (!existContact) return res.status(500).send({ message: "Contact not found" });
+
+
+  const editContact = await Contact.findByIdAndUpdate(existContact._id, {
+    landline: req.body.landline,
+    cellPhone: req.body.cellPhone,
+  });
+
+  if (!editContact) return res.status(500).send({ message: "Error editing contact" });
+
+  return res.status(200).send({ message: "Contact updated" });
+
+};
+
+
+export default { registerContact, listContact, deleteContact, existingContact, directoryFull, updateContact };

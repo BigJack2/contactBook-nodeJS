@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const dbConnection = () => {
 
   try {
@@ -18,5 +19,6 @@ const dbConnection = () => {
 
   }
 };
+
 
 export default { dbConnection }
