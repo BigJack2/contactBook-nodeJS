@@ -1,6 +1,8 @@
 # contactBook-nodeJS
 <strong>Routes of contacts</strong>
-<br>
+<br><br>
+<strong>Test with and use:</strong> Postman, MongoBD and Express of nodeJS. 
+<br><br>
 <strong>Register contact: </strong> http://localhost:3001/api/contact/registerContact
 <br>
 <strong>Validations:</strong> If the notebook is full, If the contact exist, If data is completed.
